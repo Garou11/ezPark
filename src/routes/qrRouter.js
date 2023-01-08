@@ -38,4 +38,18 @@ qrRouter.route('/fetchQR')
         }
     })
 
+    qrRouter.route('/sampleQR')
+    .get(async(req, res)=> {
+        let response = {
+            "data": ["data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"]
+        }
+        response = JSON.stringify(response);
+        QRCode.toString(response,options, function (err, qrcode) {
+            if(err) return console.log("error occurred");
+            console.log(qrcode);
+            console.log(JSON.stringify(qrcode));
+            res.status(200).send(JSON.stringify({"data": [qrcode]}));
+        })
+    })
+
 module.exports = qrRouter;
