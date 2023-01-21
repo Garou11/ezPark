@@ -6,8 +6,8 @@ const mysql=require('mysql');
 
 transactionRouter.use(bodyParser.json());
 
-transactionRouter.route()
-    .get('/getAllTransactions',async(req, res)=> {
+transactionRouter.route('/getAllTransactions')
+    .get(async(req, res)=> {
         try{
             let usrId = parseInt(req.query.userId) || null;
             if(!usrId){
@@ -38,4 +38,4 @@ transactionRouter.route()
         }
     })
 
-module.exports = qrRouter;
+module.exports = transactionRouter;
