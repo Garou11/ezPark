@@ -1,5 +1,4 @@
-const express = require('express');
-const QRCode = require('qrcode');
+const express = require('express')
 const bodyParser = require('body-parser');
 const transactionRouter = express.Router();
 const tblTransactions = require('../database/models/tbTransactions')
