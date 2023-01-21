@@ -8,19 +8,32 @@ transactionRouter.use(bodyParser.json());
 transactionRouter.route('/getAllTransactions')
     .get(async(req, res)=> {
         try{
-            let usrId = parseInt(req.query.userId) || null;
-            if(!usrId){
+            let usrId = req.query.userId || null;
+            let optrId = req.query.optrId || null;
+            if(!usrId || !optrId){
                 throw new Error("invalid Request Body");
             }
 
-            const transactions = await tblTransactions.findAll({
-                where: {
-                    userId: usrId
-                },
-                order: [['inTime', 'DESC']],
-                raw: true
-            });
-
+            var transactions;
+            if(usrId){
+                transactions = await tblTransactions.findAll({
+                    where: {
+                        userId: usrId
+                    },
+                    order: [['inTime', 'DESC']],
+                    raw: true
+                });
+            }
+            else {
+                transactions = await tblTransactions.findAll({
+                    where: {
+                        operatorId: optrId
+                    },
+                    order: [['inTime', 'DESC']],
+                    raw: true
+                });
+            }
+            
             res.status(200).send(transactions);
         } catch(e){
             res.status(400).send(e);
