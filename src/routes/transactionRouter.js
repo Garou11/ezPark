@@ -2,7 +2,7 @@ const express = require('express');
 const QRCode = require('qrcode');
 const bodyParser = require('body-parser');
 const transactionRouter = express.Router();
-const mysql=require('mysql');
+const tblTransactions = require('../database/models/tbTransactions')
 
 transactionRouter.use(bodyParser.json());
 
@@ -14,25 +14,15 @@ transactionRouter.route('/getAllTransactions')
                 throw new Error("invalid Request Body");
             }
 
-            var con = mysql.createConnection({
-            host: "localhost",
-            user: "yourusername",
-            password: "yourpassword"
+            const transactions = await tblTransactions.findAll({
+                where: {
+                    userId: usrId
+                },
+                order: [['inTime', 'DESC']],
+                raw: true
             });
 
-            var sql= "SELECT * FROM transactions WHERE userId = ? ORDER BY createdOn DESC"; 
-
-            con.connect(function(err) {
-            if (err) throw err;
-            console.log("Connected!");
-            con.query(sql,[usrId], function (err, result) {
-                if (err) throw err;
-                res.data=result;
-                console.log("Result: " + result);
-              });
-            });
-
-            res.status(200).send(res);
+            res.status(200).send(transactions);
         } catch(e){
             res.status(400).send(e);
         }
