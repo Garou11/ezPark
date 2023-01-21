@@ -10,7 +10,7 @@ transactionRouter.route('/getAllTransactions')
         try{
             let usrId = req.query.userId || null;
             let optrId = req.query.optrId || null;
-            if(!usrId || !optrId){
+            if(!usrId && !optrId){
                 throw new Error("invalid Request Body");
             }
 
