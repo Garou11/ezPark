@@ -11,7 +11,7 @@ activeRouter.route('/validateParking')
     .post(async(req, res)=> {
         try{
             let usrId = req.body.userId || null;
-            if(!usrId && userId==='-1'){
+            if(!usrId && usrId==='-1'){
                 throw new Error("invalid Request Body");
             }
             let oprId = req.body.operatorId || null;
@@ -62,15 +62,15 @@ activeRouter.route('/validateParking')
             }
 
             var transactions;
-            if(usrId){
-                transactions = await activeTransactionstbl.findOne({
+            if(usrId && usrId!="null"){
+                transactions = await activeTransactionstbl.findAll({
                     where: {
                         userId: usrId
                     },
                     raw: true
                 });
             }
-            else {
+            else if(optrId && optrId!="null") {
                 transactions = await activeTransactionstbl.findAll({
                     where: {
                         operatorId: optrId

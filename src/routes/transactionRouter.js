@@ -9,13 +9,13 @@ transactionRouter.route('/getAllTransactions')
     .get(async(req, res)=> {
         try{
             let usrId = req.query.userId || null;
-            let optrId = req.query.optrId || null;
+            let optrId = req.query.operatorId || null;
             if(!usrId && !optrId){
                 throw new Error("invalid Request Body");
             }
 
             var transactions;
-            if(usrId){
+            if(usrId && usrId!="null"){
                 transactions = await tblTransactions.findAll({
                     where: {
                         userId: usrId
@@ -24,7 +24,7 @@ transactionRouter.route('/getAllTransactions')
                     raw: true
                 });
             }
-            else {
+            else if(optrId && optrId!="null") {
                 transactions = await tblTransactions.findAll({
                     where: {
                         operatorId: optrId
