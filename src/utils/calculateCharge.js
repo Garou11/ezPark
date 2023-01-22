@@ -3,13 +3,14 @@ const operators = require('../database/models/operators');
 const sequelize= require('sequelize');
 
 const charge = async function(optrId, vehicleType, start) {
-    const optrConfig = await operators.findOne({
+    const costConfig = await operators.findOne({
         attributes:['chargeConfig'],
         where: {
             operatorId: optrId
         },
         raw: true
     });
+    var optrConfig=costConfig[vehicleType]
     var end = Date.now();
     var diff = end-start;
     var convertTime = Math.round(diff/1000);
