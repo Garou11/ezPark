@@ -56,7 +56,7 @@ activeRouter.route('/validateParking')
     .get(async function(req,res) {
         try{
             let usrId = req.query.userId || null;
-            let optrId = req.query.optrId || null;
+            let optrId = req.query.operatorId || null;
             if(!usrId && !oprtrId){
                 throw new Error("invalid Request Body");
             }
