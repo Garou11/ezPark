@@ -2,7 +2,7 @@ const config = require('./operatorConfig.json');
 const operators = require('../database/models/operators');
 const sequelize= require('sequelize');
 
-const charge = async function(optrId, vehicleType, start) {
+const calculateCharge = async function(optrId, vehicleType, start) {
     const costConfig = await operators.findOne({
         attributes:['chargeConfig'],
         where: {
@@ -10,7 +10,7 @@ const charge = async function(optrId, vehicleType, start) {
         },
         raw: true
     });
-    var optrConfig=costConfig[vehicleType]
+    var optrConfig=costConfig['chargeConfig'][vehicleType];
     var end = Date.now();
     var diff = end-start;
     var convertTime = Math.round(diff/1000);
@@ -38,4 +38,4 @@ const charge = async function(optrId, vehicleType, start) {
     return charges;
 }
 
-module.exports = charge;
+module.exports = calculateCharge;

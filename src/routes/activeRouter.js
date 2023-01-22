@@ -34,7 +34,7 @@ activeRouter.route('/validateParking')
                     res.status(200).send(parkInfo[0]);
                 }
                 else {
-                    var amount = await calculateCharges(oprId, vehicleType, parkInfo[0].inTime);
+                    var amount = await calculateCharges(oprId, req.body.vehicleType, parkInfo[0].inTime);
                     const transaction= await tblTransactions.create({
                         userId: usrId,
                         operatorId: oprId,
