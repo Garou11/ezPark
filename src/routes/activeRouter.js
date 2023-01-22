@@ -15,7 +15,7 @@ activeRouter.route('/validateParking')
                 throw new Error("invalid Request Body");
             }
             let oprId = req.body.operatorId || null;
-            if(!oprId && optrId==='-1'){
+            if(!oprId && oprId==='-1'){
                 throw new Error("invalid Request Body");
             }
             var parkInfo;
