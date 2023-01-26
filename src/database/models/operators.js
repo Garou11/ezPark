@@ -19,6 +19,7 @@ const operators = ezParkSequelize.define('operators', {
                 this.setDataValue('value', JSON.stringify(value));
             }
     },
+    validationCode: {type:sequelize.STRING},
     createdAt: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP')}
 },{timestamps: false});
 

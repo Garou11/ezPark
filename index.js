@@ -3,6 +3,7 @@ const app = express();
 
 const transactionRouter = require("./src/routes/transactionRouter");
 const activeRouter = require('./src/routes/activeRouter');
+const authRouter = require('./src/routes/authRouter');
 
 const hostname="localhost";
 const port = process.env.PORT || 8000;
@@ -13,6 +14,7 @@ app.use('/health/stats', function(req,res) {
 
 app.use('/', transactionRouter);
 app.use('/',activeRouter);
+app.use('/',authRouter);
 
 app.listen(port, hostname, ()=> {
     console.log("Server is running at :",port);
