@@ -11,11 +11,11 @@ activeRouter.route('/validateParking')
     .post(async(req, res)=> {
         try{
             let usrId = req.body.userId || null;
-            if(!usrId && usrId==='-1'){
+            if(!usrId || usrId==='-1'){
                 throw new Error("invalid Request Body");
             }
             let oprId = req.body.operatorId || null;
-            if(!oprId && oprId==='-1'){
+            if(!oprId || oprId==='-1'){
                 throw new Error("invalid Request Body");
             }
             var parkInfo;
