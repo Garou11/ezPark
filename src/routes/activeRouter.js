@@ -31,6 +31,7 @@ activeRouter.route('/validateParking')
                     }
                 });
                 if(parkInfo[1]=== true) {
+                    parkInfo[0]["dataValues"]["entry"]=true;
                     res.status(200).send(parkInfo[0]);
                 }
                 else {
@@ -43,6 +44,7 @@ activeRouter.route('/validateParking')
                         charges: amount
                     });
                     parkInfo[0].destroy();
+                    transaction["dataValues"]["entry"]=false;
                     res.status(200).send(transaction);
                 }
             }catch(e){
