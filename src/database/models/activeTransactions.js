@@ -11,7 +11,7 @@ const activeTransactions = ezParkSequelize.define('activeTransactions', {
     userId: {type: sequelize.STRING, allowNull: false},
     operatorId: {type: sequelize.STRING, allowNull: false},
     vehicleType: {type:sequelize.STRING, allowNull: false},
-    inTime: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP')},
+    inTime: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.NOW},
 },{timestamps: false});
 
 module.exports = activeTransactions;

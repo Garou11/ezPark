@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const transactionRouter = express.Router();
 const tblTransactions = require('../database/models/tbTransactions')
-
+const convertQueryTime = require("../utils/commonFunctions");
 transactionRouter.use(bodyParser.json());
 
 transactionRouter.route('/getAllTransactions')
@@ -33,7 +33,7 @@ transactionRouter.route('/getAllTransactions')
                     raw: true
                 });
             }
-            
+            transactions= convertQueryTime(transactions);
             res.status(200).send(transactions);
         } catch(e){
             res.status(400).send(e);

@@ -4,7 +4,7 @@ const activeRouter = express.Router();
 const activeTransactionstbl = require('../database/models/activeTransactions')
 const tblTransactions = require('../database/models/tbTransactions');
 const calculateCharges = require('../utils/calculateCharge');
-
+const convertQueryTime = require('../utils/commonFunctions')
 activeRouter.use(bodyParser.json());
 
 activeRouter.route('/validateParking')
@@ -28,23 +28,31 @@ activeRouter.route('/validateParking')
                         userId: usrId,
                         operatorId: oprId,
                         vehicleType: req.body.vehicleType
-                    }
+                    },
+                    raw: true
                 });
                 if(parkInfo[1]=== true) {
                     parkInfo[0]["dataValues"]["entry"]=true;
+                    parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
                     res.status(200).send(parkInfo[0]);
                 }
                 else {
                     var amount = await calculateCharges(oprId, req.body.vehicleType, parkInfo[0].inTime);
-                    const transaction= await tblTransactions.create({
+                    var transaction= await tblTransactions.create({
                         userId: usrId,
                         operatorId: oprId,
                         vehicleType: req.body.vehicleType,
                         inTime: parkInfo[0].inTime,
                         charges: amount
                     });
-                    parkInfo[0].destroy();
+                    activeTransactionstbl.destroy({
+                        where: {
+                            userId : parkInfo[0].userId,
+                            operatorId : parkInfo[0].operatorId
+                        }
+                    });
                     transaction["dataValues"]["entry"]=false;
+                    transaction= convertQueryTime(transaction["dataValues"])
                     res.status(200).send(transaction);
                 }
             }catch(e){
@@ -81,7 +89,7 @@ activeRouter.route('/validateParking')
                     raw: true
                 });
             }
-            
+            transactions= convertQueryTime(transactions);
             res.status(200).send(transactions);
         } catch(e){
             res.status(400).send(e);
