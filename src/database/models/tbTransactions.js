@@ -12,7 +12,7 @@ const tblTransactions = ezParkSequelize.define('tblTransactions', {
     operatorId: {type: sequelize.STRING, allowNull: false},
     vehicleType: {type:sequelize.STRING, allowNull: false},
     inTime: {type: 'TIMESTAMP', allowNull:false},
-    outTime: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP')},
+    outTime: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.NOW},
     charges: {type: sequelize.INTEGER}
 },{timestamps: false});
 
