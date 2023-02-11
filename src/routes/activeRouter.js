@@ -19,6 +19,7 @@ activeRouter.route('/validateParking')
                 throw new Error("invalid Request Body");
             }
             var parkInfo;
+            let intime;
             try{
                 parkInfo = await activeTransactionstbl.findOrCreate({
                     where: {
@@ -31,18 +32,19 @@ activeRouter.route('/validateParking')
                     },
                     raw: true
                 });
+                intime = parkInfo[0].inTime;
                 if(parkInfo[1]=== true) {
                     parkInfo[0]["dataValues"]["entry"]=true;
                     parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
                     res.status(200).send(parkInfo[0]);
                 }
                 else {
-                    var amount = await calculateCharges(oprId, req.body.vehicleType, parkInfo[0].inTime);
+                    var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
                     var transaction= await tblTransactions.create({
                         userId: usrId,
                         operatorId: oprId,
                         vehicleType: req.body.vehicleType,
-                        inTime: parkInfo[0].inTime,
+                        inTime: intime,
                         charges: amount
                     });
                     activeTransactionstbl.destroy({
