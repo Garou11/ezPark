@@ -24,26 +24,6 @@ activeRouter.route('/validateParking')
             var parkInfo;
             let intime;
             try{
-
-                var userCompleteInfo = await users.findOne(
-                    {
-                        include: [
-                            {
-                                model: tblCompanySpace,
-                                // include:[
-                                //     {
-                                //         model: tblSpaceId
-                                //     }
-                                // ]
-                            }
-                        ],
-                        where: {
-                            userId:usrId
-                        },
-                        raw: true
-                    }
-                );
-                console.log(userCompleteInfo);
                 parkInfo = await activeTransactionstbl.findOrCreate({
                     include:[
                         {
