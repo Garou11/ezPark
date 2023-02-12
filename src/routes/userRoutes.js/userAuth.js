@@ -10,7 +10,7 @@ userAuth.route('/sendDetails')
     .post(async (req, res) => {
         try {
 
-            if (req.body.userId === "") {
+            if (!req.body.userId || req.body.userId==="null"|| req.body.userId === "") {
                 const companySpace = await tblCompanySpace.findOne({
                     include: [
                         {
