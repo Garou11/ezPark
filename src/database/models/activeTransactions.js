@@ -12,8 +12,6 @@ const activeTransactions = ezParkSequelize.define('activeTransactions', {
     operatorId: {type: sequelize.STRING, allowNull: false},
     vehicleType: {type:sequelize.STRING, allowNull: false},
     inTime: {type: 'TIMESTAMP', allowNull:false, defaultValue: sequelize.NOW},
-    spaceId: {type:sequelize.STRING}
 },{timestamps: false});
 
-activeTransactions.hasMany(tblSpaceId, {foreignKey: 'spaceId', sourceKey:'spaceId'});
 module.exports = activeTransactions;
