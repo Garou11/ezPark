@@ -25,11 +25,6 @@ activeRouter.route('/validateParking')
             let intime;
             try{
                 parkInfo = await activeTransactionstbl.findOrCreate({
-                    include:[
-                        {
-                            model: tblSpaceId
-                        }
-                    ],
                     where: {
                         userId: usrId
                     },
@@ -45,6 +40,7 @@ activeRouter.route('/validateParking')
                     parkInfo[0]["dataValues"]["entry"]=true;
                     parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
                     res.status(200).send(parkInfo[0]);
+                    return;
                 }
                 else {
                     var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
