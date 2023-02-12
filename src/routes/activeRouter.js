@@ -25,7 +25,7 @@ activeRouter.route('/validateParking')
             let intime;
             try{
 
-                let spaceId = await users.findAll(
+                var userCompleteInfo = await users.findOne(
                     {
                         include: [
                             {
@@ -43,7 +43,7 @@ activeRouter.route('/validateParking')
                         raw: true
                     }
                 );
-                console.log(spaceId);
+                console.log(userCompleteInfo);
                 parkInfo = await activeTransactionstbl.findOrCreate({
                     include:[
                         {
@@ -122,6 +122,7 @@ activeRouter.route('/validateParking')
             transactions= convertQueryTime(transactions);
             res.status(200).send(transactions);
         } catch(e){
+            console.log(e)
             res.status(400).send(e);
         }
     })

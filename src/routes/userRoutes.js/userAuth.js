@@ -7,34 +7,39 @@ const tblSpaceId = require('../../database/models/tblSpace_ID_Mapping');
 userAuth.use(bodyParser.json());
 
 userAuth.route('/sendDetails')
-    .post(async(req,res)=> {
-        try{
-            const companySpace = await tblCompanySpace.findOne({
-                include: [
-                    {
-                        model: tblSpaceId
-                    }
-                ],
-                where: {
-                    companyId: parseInt(req.body.companyCode)
-                },
-                raw: true
-            });
-            if(companySpace['tblSpace_ID_Mapping.spaceName']!= req.body.officeSpaceName) {
-                throw new Error('Invalid Office Space Name')
+    .post(async (req, res) => {
+        try {
+
+            if (req.body.userId === "") {
+                const companySpace = await tblCompanySpace.findOne({
+                    include: [
+                        {
+                            model: tblSpaceId
+                        }
+                    ],
+                    where: {
+                        companyId: parseInt(req.body.companyCode)
+                    },
+                    raw: true
+                });
+                if (companySpace['tblSpace_ID_Mapping.spaceName'] != req.body.officeSpaceName) {
+                    throw new Error('Invalid Office Space Name')
+                }
             }
-            const userDetails = await users.create({
-                userId: req.body.userId,
-                phoneNumber: req.body.phoneNumber,
-                companyId: parseInt(req.body.companyCode)
-            });
-            res.status(200).send({"success": true});
+            else {
+                const userDetails = await users.create({
+                    userId: req.body.userId,
+                    phoneNumber: req.body.phoneNumber,
+                    companyId: parseInt(req.body.companyCode)
+                });
+            }
+            res.status(200).send({ "success": true });
             return;
-        }catch (err){
+        } catch (err) {
             console.log(err);
-            res.status(400).send({"success": false});
+            res.status(400).send({ "success": false });
             return;
         }
     });
 
-    module.exports = userAuth;
+module.exports = userAuth;
