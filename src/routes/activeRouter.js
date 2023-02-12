@@ -4,7 +4,10 @@ const activeRouter = express.Router();
 const activeTransactionstbl = require('../database/models/activeTransactions')
 const tblTransactions = require('../database/models/tbTransactions');
 const calculateCharges = require('../utils/calculateCharge');
-const convertQueryTime = require('../utils/commonFunctions')
+const convertQueryTime = require('../utils/commonFunctions');
+const tblCompanySpace= require('../database/models/tblCompany_Space_Mapping');
+const users = require('../database/models/users');
+const tblSpaceId = require('../database/models/tblSpace_ID_Mapping');
 activeRouter.use(bodyParser.json());
 
 activeRouter.route('/validateParking')
@@ -21,7 +24,32 @@ activeRouter.route('/validateParking')
             var parkInfo;
             let intime;
             try{
+
+                let spaceId = await users.findAll(
+                    {
+                        include: [
+                            {
+                                model: tblCompanySpace,
+                                // include:[
+                                //     {
+                                //         model: tblSpaceId
+                                //     }
+                                // ]
+                            }
+                        ],
+                        where: {
+                            userId:usrId
+                        },
+                        raw: true
+                    }
+                );
+                console.log(spaceId);
                 parkInfo = await activeTransactionstbl.findOrCreate({
+                    include:[
+                        {
+                            model: tblSpaceId
+                        }
+                    ],
                     where: {
                         userId: usrId
                     },
