@@ -1,6 +1,6 @@
 const ezParkSequelize=require('./index');
 const sequelize = require('sequelize');
-
+const tblSpaceId =  require('./tblSpace_ID_Mapping');
 const activeTransactions = ezParkSequelize.define('activeTransactions', {
     id: {
         type: sequelize.INTEGER,

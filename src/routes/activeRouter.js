@@ -4,7 +4,10 @@ const activeRouter = express.Router();
 const activeTransactionstbl = require('../database/models/activeTransactions')
 const tblTransactions = require('../database/models/tbTransactions');
 const calculateCharges = require('../utils/calculateCharge');
-const convertQueryTime = require('../utils/commonFunctions')
+const convertQueryTime = require('../utils/commonFunctions');
+const tblCompanySpace= require('../database/models/tblCompany_Space_Mapping');
+const users = require('../database/models/users');
+const tblSpaceId = require('../database/models/tblSpace_ID_Mapping');
 activeRouter.use(bodyParser.json());
 
 activeRouter.route('/validateParking')
@@ -37,6 +40,7 @@ activeRouter.route('/validateParking')
                     parkInfo[0]["dataValues"]["entry"]=true;
                     parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
                     res.status(200).send(parkInfo[0]);
+                    return;
                 }
                 else {
                     var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
@@ -94,6 +98,7 @@ activeRouter.route('/validateParking')
             transactions= convertQueryTime(transactions);
             res.status(200).send(transactions);
         } catch(e){
+            console.log(e)
             res.status(400).send(e);
         }
     })
