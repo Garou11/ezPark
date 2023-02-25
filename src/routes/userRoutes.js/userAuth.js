@@ -45,7 +45,7 @@ userAuth.route('/sendDetails')
 userAuth.route('/userDetails')
     .get(async (req, res) => {
         try {
-            let usrId = req.body.userId;
+            let usrId = req.query.userId;
             let userDeatils = await users.findOne({
                 include: [
                     {
@@ -62,6 +62,7 @@ userAuth.route('/userDetails')
             if (userDeatils["tblCompany_Space_Mapping.availableSlots"] < 0) {
                 userDeatils["tblCompany_Space_Mapping.availableSlots"] = 0;
             }
+            userDeatils= JSON.stringify(userDeatils, (k, v) => v && typeof v === 'object' ? v : '' + v);
             return res.status(200).send(userDeatils);
         } catch (e) {
             console.log(e);
