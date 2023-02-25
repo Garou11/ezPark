@@ -10,7 +10,7 @@ userAuth.route('/sendDetails')
     .post(async (req, res) => {
         try {
 
-            if (!req.body.userId || req.body.userId==="null"|| req.body.userId === "") {
+            if (!req.body.userId || req.body.userId === "null" || req.body.userId === "") {
                 const companySpace = await tblCompanySpace.findOne({
                     include: [
                         {
@@ -41,5 +41,32 @@ userAuth.route('/sendDetails')
             return;
         }
     });
+
+userAuth.route('/userDetails')
+    .get(async (req, res) => {
+        try {
+            let usrId = req.body.userId;
+            let userDeatils = await users.findOne({
+                include: [
+                    {
+                        model: tblCompanySpace,
+                        attributes: ['companyName', 'spaceId', 'totalSlots', 'availableSlots'],
+                    }
+                ],
+                where: {
+                    userId: usrId
+                },
+                attributes: ['userId', 'phoneNumber', 'companyId'],
+                raw: true
+            });
+            if (userDeatils["tblCompany_Space_Mapping.availableSlots"] < 0) {
+                userDeatils["tblCompany_Space_Mapping.availableSlots"] = 0;
+            }
+            return res.status(200).send(userDeatils);
+        } catch (e) {
+            console.log(e);
+            return res.status(400).send(e);
+        }
+    })
 
 module.exports = userAuth;

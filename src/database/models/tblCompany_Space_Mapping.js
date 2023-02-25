@@ -9,6 +9,8 @@ const tblCompanySpace = ezParkSequelize.define('tblCompany_Space_Mapping', {
     },
     spaceId : { type: sequelize.INTEGER},
     companyName: {type:sequelize.STRING, allowNull: false},
+    totalSlots: {type: sequelize.INTEGER},
+    availableSlots: {type: sequelize.INTEGER}
 },{timestamps: false});
 
 tblCompanySpace.belongsTo(tblSpaceId, {foreignKey: 'spaceId', sourceKey: 'spaceId'});
