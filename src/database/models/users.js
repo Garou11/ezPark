@@ -8,8 +8,12 @@ const users = ezParkSequelize.define('users', {
         allowNull: false
     },
     phoneNumber: {type: sequelize.STRING},
-    companyId: {type: sequelize.INTEGER}
+    companyId: {type: sequelize.INTEGER},
+    tblCompanySpaceMappingId: {
+        type: sequelize.INTEGER,
+        field:'companyId'
+    },
 },{timestamps: false});
 
-users.belongsTo(tblCompanySpace, {foreignkey: 'companyId', sourceKey:'companyId'});
+users.belongsTo(tblCompanySpace, {foreignkey: 'companyId', targetKey:'companyId'});
 module.exports = users;

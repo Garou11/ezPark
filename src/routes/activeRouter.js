@@ -8,6 +8,7 @@ const convertQueryTime = require('../utils/commonFunctions');
 const tblCompanySpace= require('../database/models/tblCompany_Space_Mapping');
 const users = require('../database/models/users');
 const tblSpaceId = require('../database/models/tblSpace_ID_Mapping');
+const updateParking = require('../utils/parkingSlots');
 activeRouter.use(bodyParser.json());
 
 activeRouter.route('/validateParking')
@@ -39,8 +40,8 @@ activeRouter.route('/validateParking')
                 if(parkInfo[1]=== true) {
                     parkInfo[0]["dataValues"]["entry"]=true;
                     parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
-                    res.status(200).send(parkInfo[0]);
-                    return;
+                    await updateParking(usrId, true);
+                    return res.status(200).send(parkInfo[0]);
                 }
                 else {
                     var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
@@ -58,8 +59,9 @@ activeRouter.route('/validateParking')
                         }
                     });
                     transaction["dataValues"]["entry"]=false;
-                    transaction= convertQueryTime(transaction["dataValues"])
-                    res.status(200).send(transaction);
+                    transaction= convertQueryTime(transaction["dataValues"]);
+                    await updateParking(usrId, false);
+                    return res.status(200).send(transaction);
                 }
             }catch(e){
                 throw new Error(e);
