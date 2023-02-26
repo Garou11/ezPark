@@ -9,13 +9,14 @@ const tblCompanySpace= require('../database/models/tblCompany_Space_Mapping');
 const users = require('../database/models/users');
 const tblSpaceId = require('../database/models/tblSpace_ID_Mapping');
 const updateParking = require('../utils/parkingSlots');
+const addGuest = require('../utils/guestOperations');
 activeRouter.use(bodyParser.json());
 
 activeRouter.route('/validateParking')
     .post(async(req, res)=> {
         try{
             let usrId = req.body.userId || null;
-            if(!usrId || !((/[a-zA-Z0-9]{28}/gm.test(usrId) || (/[0-9]{4}/gm.test(usrId))))){
+            if(!usrId || !((/[a-zA-Z0-9]{28}/gm.test(usrId) || (/[0-9]{4}/gm.test(usrId)))) ){
                 throw new Error("invalid Request Body");
             }
             let oprId = req.body.operatorId || null;
@@ -40,17 +41,22 @@ activeRouter.route('/validateParking')
                 if(parkInfo[1]=== true) {
                     parkInfo[0]["dataValues"]["entry"]=true;
                     parkInfo[0]= convertQueryTime(parkInfo[0]["dataValues"]);
-                    await updateParking(usrId, true);
+                    if(usrId.length===4) {
+                        let isGuestAdded = await addGuest(req.body);
+                        console.log(isGuestAdded?("Added Guest"+usrId):("Unable to add guest"+usrId));
+                    }
+                    else{
+                        await updateParking(usrId, true);
+                    }
                     return res.status(200).send(parkInfo[0]);
                 }
                 else {
-                    var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
+                    //var amount = await calculateCharges(oprId, req.body.vehicleType, intime);
                     var transaction= await tblTransactions.create({
                         userId: usrId,
                         operatorId: oprId,
                         vehicleType: req.body.vehicleType,
-                        inTime: intime,
-                        charges: amount
+                        inTime: intime
                     });
                     activeTransactionstbl.destroy({
                         where: {
@@ -60,7 +66,8 @@ activeRouter.route('/validateParking')
                     });
                     transaction["dataValues"]["entry"]=false;
                     transaction= convertQueryTime(transaction["dataValues"]);
-                    await updateParking(usrId, false);
+                    if(usrId.length!=4)
+                        await updateParking(usrId, false);
                     return res.status(200).send(transaction);
                 }
             }catch(e){
