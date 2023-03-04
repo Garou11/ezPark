@@ -9,7 +9,6 @@ userAuth.use(bodyParser.json());
 userAuth.route('/sendDetails')
     .post(async (req, res) => {
         try {
-
             if (!req.body.userId || req.body.userId === "null" || req.body.userId === "") {
                 const companySpace = await tblCompanySpace.findOne({
                     include: [
@@ -37,7 +36,7 @@ userAuth.route('/sendDetails')
             return;
         } catch (err) {
             console.log(err);
-            res.status(400).send({ "success": false });
+            res.status(200).send({ "success": false });
             return;
         }
     });
