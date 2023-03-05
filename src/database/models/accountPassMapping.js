@@ -8,7 +8,7 @@ const accountPassMapping = ezParkSequelize.define('accountPassMapping', {
         allowNull: false,
         autoIncrement: true
     },
-    email: {type: sequelize.STRING, allowNull: false},
+    username: {type: sequelize.STRING, allowNull: false},
     password: {type: sequelize.STRING, allowNull: false},
     spaceId: {type:sequelize.INTEGER},
 },{timestamps: false});
