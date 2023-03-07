@@ -11,6 +11,7 @@ const accountPassMapping = ezParkSequelize.define('accountPassMapping', {
     username: {type: sequelize.STRING, allowNull: false},
     password: {type: sequelize.STRING, allowNull: false},
     spaceId: {type:sequelize.INTEGER},
+    redirectUrl: {type: sequelize.STRING},
 },{timestamps: false});
 
 module.exports = accountPassMapping;
