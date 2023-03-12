@@ -15,20 +15,31 @@ const updateParking = async function (usrId, isEntry) {
         console.log(company);
         updateSlot = isEntry ? -1 : 1;
 
-
-
-        let slotUpdate = await tblCompanySpace.increment('availableSlots',
-            {
-                by: updateSlot,
-                where: {
-                    companyId: company.companyId,
-                    availableSlots:{
-                        [Op.gt]:0
+        let slotUpdate;
+        if (isEntry) {
+            slotUpdate = await tblCompanySpace.increment('availableSlots',
+                {
+                    by: updateSlot,
+                    where: {
+                        companyId: company.companyId,
+                        availableSlots: {
+                            [Op.gt]: 0
+                        }
                     }
                 }
-            }
-        );
-        if(slotUpdate[0][1]===1){
+            );
+        }
+        else {
+            slotUpdate = await tblCompanySpace.increment('availableSlots',
+                {
+                    by: updateSlot,
+                    where: {
+                        companyId: company.companyId
+                    }
+                }
+            );
+        }
+        if (slotUpdate[0][1] === 1) {
             return true;
         } else {
             return false;
