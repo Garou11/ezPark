@@ -48,14 +48,14 @@ activeRouter.route('/validateParking')
                     else{
                         let isParkingAvail = await updateParking(usrId, true);
                         if(isParkingAvail){
-                            parkInfo[0]["parkingAvaialble"] = true;
+                            parkInfo[0]["parkingAvailable"] = true;
                         } else {
                             await activeTransactionstbl.destroy({
                                 where: {
                                     userId: usrId
                                 }
                             });
-                            parkInfo[0]["parkingAvaialble"] = false;
+                            parkInfo[0]["parkingAvailable"] = false;
                         }
                     }
                     return res.status(200).send(parkInfo[0]);
