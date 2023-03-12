@@ -1,5 +1,7 @@
 const tblCompanySpace = require('../database/models/tblCompany_Space_Mapping');
 const users = require('../database/models/users');
+const sequelize = require('sequelize');
+const Op = sequelize.Op;
 
 const updateParking = async function (usrId, isEntry) {
     try {
@@ -13,18 +15,27 @@ const updateParking = async function (usrId, isEntry) {
         console.log(company);
         updateSlot = isEntry ? -1 : 1;
 
+
+
         let slotUpdate = await tblCompanySpace.increment('availableSlots',
             {
                 by: updateSlot,
                 where: {
-                    companyId: company.companyId
+                    companyId: company.companyId,
+                    availableSlots:{
+                        [Op.gt]:0
+                    }
                 }
             }
         );
-        return;
+        if(slotUpdate[0][1]===1){
+            return true;
+        } else {
+            return false;
+        }
     } catch (e) {
         console.log(e);
-        return;
+        return false;
     }
 }
 

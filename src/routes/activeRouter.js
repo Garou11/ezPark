@@ -46,7 +46,17 @@ activeRouter.route('/validateParking')
                         console.log(isGuestAdded?("Added Guest"+usrId):("Unable to add guest"+usrId));
                     }
                     else{
-                        await updateParking(usrId, true);
+                        let isParkingAvail = await updateParking(usrId, true);
+                        if(isParkingAvail){
+                            parkInfo[0]["parkingAvaialble"] = true;
+                        } else {
+                            await activeTransactionstbl.destroy({
+                                where: {
+                                    userId: usrId
+                                }
+                            });
+                            parkInfo[0]["parkingAvaialble"] = false;
+                        }
                     }
                     return res.status(200).send(parkInfo[0]);
                 }
@@ -66,8 +76,9 @@ activeRouter.route('/validateParking')
                     });
                     transaction["dataValues"]["entry"]=false;
                     transaction= convertQueryTime(transaction["dataValues"]);
-                    if(usrId.length!=4)
-                        await updateParking(usrId, false);
+                    if(usrId.length!=4){
+                        let isSlot = await updateParking(usrId, false);
+                    }
                     return res.status(200).send(transaction);
                 }
             }catch(e){
