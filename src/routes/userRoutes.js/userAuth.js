@@ -49,7 +49,7 @@ userAuth.route('/userDetails')
                 include: [
                     {
                         model: tblCompanySpace,
-                        attributes: ['companyName', 'spaceId', 'totalSlots', 'availableSlots'],
+                        attributes: ['companyName', 'spaceId', 'availableCarSlots', 'availableScooterSlots'],
                     }
                 ],
                 where: {
@@ -58,8 +58,11 @@ userAuth.route('/userDetails')
                 attributes: ['userId', 'phoneNumber', 'companyId'],
                 raw: true
             });
-            if (userDeatils["tblCompany_Space_Mapping.availableSlots"] < 0) {
-                userDeatils["tblCompany_Space_Mapping.availableSlots"] = 0;
+            if (userDeatils["tblCompany_Space_Mapping.availableCarSlots"] < 0) {
+                userDeatils["tblCompany_Space_Mapping.availableCarSlots"] = 0;
+            }
+            if (userDeatils["tblCompany_Space_Mapping.availableScooterSlots"] < 0) {
+                userDeatils["tblCompany_Space_Mapping.availableScooterSlots"] = 0;
             }
             userDeatils= JSON.stringify(userDeatils, (k, v) => v && typeof v === 'object' ? v : '' + v);
             return res.status(200).send(userDeatils);
