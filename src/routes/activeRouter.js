@@ -23,6 +23,9 @@ activeRouter.route('/validateParking')
             if(!oprId || oprId==='-1'){
                 throw new Error("invalid Request Body");
             }
+            if(req.body.vehicleType!= 'Car' && req.body.vehicleType!='Scooter') {
+                throw new Error('Invalid Vehicle type');
+            }
             var parkInfo;
             let intime;
             try{
@@ -46,7 +49,7 @@ activeRouter.route('/validateParking')
                         console.log(isGuestAdded?("Added Guest"+usrId):("Unable to add guest"+usrId));
                     }
                     else{
-                        let isParkingAvail = await updateParking(usrId, true);
+                        let isParkingAvail = await updateParking(usrId,req.body.vehicleType, true);
                         if(isParkingAvail){
                             parkInfo[0]["parkingAvailable"] = true;
                         } else {
@@ -77,7 +80,7 @@ activeRouter.route('/validateParking')
                     transaction["dataValues"]["entry"]=false;
                     transaction= convertQueryTime(transaction["dataValues"]);
                     if(usrId.length!=4){
-                        let isSlot = await updateParking(usrId, false);
+                        let isSlot = await updateParking(usrId,req.body.vehicleType, false);
                     }
                     return res.status(200).send(transaction);
                 }

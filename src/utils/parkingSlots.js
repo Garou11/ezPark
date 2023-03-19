@@ -3,7 +3,7 @@ const users = require('../database/models/users');
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
 
-const updateParking = async function (usrId, isEntry) {
+const updateParking = async function (usrId, vehicle, isEntry) {
     try {
         let company = await users.findOne({
             where: {
@@ -15,9 +15,11 @@ const updateParking = async function (usrId, isEntry) {
         console.log(company);
         updateSlot = isEntry ? -1 : 1;
 
+        var slotColoumn = vehicle=='Car'? 'availableCarSlots': 'availableScooterSlots';
+
         let slotUpdate;
         if (isEntry) {
-            slotUpdate = await tblCompanySpace.increment('availableSlots',
+            slotUpdate = await tblCompanySpace.increment(slotColoumn,
                 {
                     by: updateSlot,
                     where: {
@@ -30,7 +32,7 @@ const updateParking = async function (usrId, isEntry) {
             );
         }
         else {
-            slotUpdate = await tblCompanySpace.increment('availableSlots',
+            slotUpdate = await tblCompanySpace.increment(slotColoumn,
                 {
                     by: updateSlot,
                     where: {
