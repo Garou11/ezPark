@@ -30,13 +30,13 @@ authRouter.route('/operatorAuth')
                 raw: true
             });
             if(operator && operator.length>0) {
-                operator[0]['sucess'] = true;
+                operator[0]['success'] = true;
                 res.status(200).send(operator);
             }
             else
                 throw new Error('not found')
         } catch(e){
-            res.status(400).send([{sucess: false}]);
+            res.status(400).send([{success: false}]);
         }
     })
 
